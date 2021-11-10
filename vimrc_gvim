@@ -13,8 +13,8 @@ set nofoldenable
 set nowrap
 set number
 set relativenumber
-set shiftwidth=5
-set tabstop=5
+set shiftwidth=4
+set tabstop=4
 set textwidth=80
 set viminfo='100,h,n~/.vim/viminfo
 set hlsearch
@@ -34,9 +34,6 @@ function ExtendedHome()
 endfunction
 " This function is now mapped to home, both in normal mode and in insert mode.
 noremap <Home> :call ExtendedHome() <CR>
-"inoremap <silent> <Home> <Esc> :call ExtendedHome() <CR>   <--- This doesn't work!!
-
-map <F5> :setlocal spell! spelllang=en_us<CR>
 
 " Make <F9> enter a mode where only the current paragraph is highlighted, and
 " lines are auto-wrapped (good for editing multi-line comments)
@@ -109,6 +106,7 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g`\"" | endif
 endif
+
 "--------------------------------------------------------------------
 " Install Plugin Manger
 "--------------------------------------------------------------------
@@ -133,7 +131,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'junegunn/goyo.vim'
     Plug 'junegunn/limelight.vim'
     Plug 'reedes/vim-pencil'
-    Plug 'lervag/vimtex'
     Plug 'chriskempson/base16-vim'
     Plug 'JuliaEditorSupport/julia-vim'
     " Plugin for Vim autocomplete snippets
@@ -145,18 +142,6 @@ call plug#begin('~/.vim/plugged')
 
 call plug#end()
 
-" Latex editing config
-let g:tex_flavor='latex'
-let g:vimtex_view_method='zathura'
-let g:vimtex_quickfix_mode=0
-set conceallevel=1
-let g:tex_conceal='abdmg'
-
-"setlocal spell
-"set spelllang=en_us
-"inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
-
-
 " Snippets config
 let g:UltiSnipsExpandTrigger = '<tab>'
 let g:UltiSnipsJumpForwardTrigger = '<tab>'
@@ -165,31 +150,43 @@ let g:UltiSnipsSnippetDirectories=["~/linux-setup/config/"]
 
 " COC extensions
 let g:coc_global_extensions = ['coc-clangd', 'coc-pyright']
+
 " Remap keys for gotos
 nmap gd <Plug>(coc-definition)
 nmap gt <Plug>(coc-type-definition)
 nmap gi <Plug>(coc-implementation)
 nmap gr <Plug>(coc-references)
+
 " Turn off autocomplete
 let b:coc_suggest_disable = 1
 
 " Map toggle for NERDTree
 noremap <C-n> :NERDTreeToggle<CR>
+
 " Move up and down in tree
 map <C-PageUp> <C-w><Left><Up><CR>
 map <C-PageDown> <C-w><Left><Down><CR>
+
 " Resize window
 :let g:NERDTreeWinSize=20
+
 " Fix line delimiter variable
 let g:NERDTreeNodeDelimiter = "\u00a0"
+
 " Open NERDTree automatically when vim starts up if no files were specified
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
 " Open NERDTree automatically when vim starts up on opening a directory
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+
 " Close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" F9 to automatically compile my c++ program with all of the warnings
+autocmd filetype cpp nnoremap :w exec '!g++ -std=c++11 -Wall -Wconversion -Wextra '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')
+
 "--------------------------------------------------------------------
 " Appearance
 "--------------------------------------------------------------------
