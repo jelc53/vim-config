@@ -185,7 +185,7 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " F9 to automatically compile my c++ program with all of the warnings
-autocmd filetype cpp nnoremap :w exec '!g++ -std=c++11 -Wall -Wconversion -Wextra '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')
+"autocmd filetype cpp nnoremap :w exec '!g++ -std=c++11 -Wall -Wconversion -Wextra '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')
 
 "--------------------------------------------------------------------
 " Appearance
